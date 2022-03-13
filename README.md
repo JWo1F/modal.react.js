@@ -70,6 +70,11 @@ component inside. So, your code will normally look like this:
 </BasicModal>
 ```
 
+You also can use a simple decorator:
+```jsx
+wrapWithBasicModal(YourOwnModalImplementation);
+```
+
 ## How to animate your own modal window
 Inside the BasicModal anchor you can use a special hook
 `useBasicModalUnmount(fn)`. The function that will be passed
@@ -189,6 +194,21 @@ async function alert(text: string) {
 }
 ```
 
+The `showModal` function is implemented for easier
+use of such functionality:
+
+```typescript jsx
+const alert = async (text: string) => (
+  showModal<MyType>((resolve, reject) => (
+    <AlertWindow
+      text={text}
+      onClose={() => reject('closed')}
+      onConfirm={(res: MyType) => resolve(res)}
+    />
+  ))
+);
+```
+
 You can also change the props for your element
 (and replace it with another) using the same ID as the
 first rendering of your element:
@@ -224,6 +244,8 @@ and `useFlowValue`, you need to define a
 You may also need a function to get Promise and its Resolve
 function at the same time (in which case Promise will be
 in Pending state until its Resolve function is called):
+
+(or use `showModal`)
 
 ```typescript jsx
 enum Result {
