@@ -1,10 +1,11 @@
 {
   "name": "modal.react.js",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "main": "build/bundle.js",
   "types": "build/src/index.d.ts",
   "repository": "https://github.com/JWo1F/modal.react.js",
   "author": "Alex Ivashkin <alex.ivashkin@jetrockets.com>",
+  "keywords": ["react", "modal", "alert", "confirm", "prompt", "window"],
   "license": "MIT",
   "scripts": {
     "build": "webpack --config config/webpack.dev.config.js",
