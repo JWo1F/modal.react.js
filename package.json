@@ -1,10 +1,13 @@
 {
   "name": "modal.react.js",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "main": "build/bundle.js",
   "types": "build/src/index.d.ts",
   "repository": "https://github.com/JWo1F/modal.react.js",
   "author": "Alex Ivashkin <alex.ivashkin@jetrockets.com>",
+  "files": [
+    "build/*"
+  ],
   "keywords": [
     "react",
     "modal",
