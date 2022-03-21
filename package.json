@@ -1,6 +1,6 @@
 {
   "name": "modal.react.js",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": "build/bundle.js",
   "types": "build/src/index.d.ts",
   "repository": "https://github.com/JWo1F/modal.react.js",
@@ -16,8 +16,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --config config/webpack.dev.config.js",
-    "build:prod": "webpack --config config/webpack.production.config.js",
-    "prepublish": "yarn run build:prod"
+    "build:prod": "webpack --config config/webpack.production.config.js"
   },
   "devDependencies": {
     "@types/react": "^17.0.40",
