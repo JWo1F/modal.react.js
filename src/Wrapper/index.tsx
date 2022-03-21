@@ -2,12 +2,11 @@ import * as React from 'react';
 import {
   ReactNode, createContext, useState, useEffect
 } from 'react';
-
-import { useModalId } from '../hooks/useModalId';
+import {modalId} from "../utils/modalId";
 
 interface IProps {
   children?: ReactNode;
-  global?: boolean;
+  global?: number | boolean;
 }
 
 interface IContext {
@@ -25,18 +24,28 @@ export const ModalsContext = createContext<IContext>(null as unknown as IContext
 type onUpsertFunction = (state: IModalState) => void;
 type onDeleteFunction = (id: string) => void;
 
-const defaultGlobalFn = () => { throw new Error('You don\'t have Global Wrapper'); };
+const DEFAULT_MODAL_ID = modalId();
+interface IGlobalFunctionsHolder {
+  [id: string | number]: {
+    readonly upsert: onUpsertFunction;
+    readonly delete: onDeleteFunction;
+  }
+}
 
-let globalWrapperId: string | undefined;
-let onUpsertModalGlobal: onUpsertFunction = defaultGlobalFn;
-let onDeleteModalGlobal: onDeleteFunction = defaultGlobalFn;
+const HOLDER: IGlobalFunctionsHolder = {};
 
-export const upsertModalGlobal: onUpsertFunction = (...args) => onUpsertModalGlobal(...args);
-export const deleteModalGlobal: onDeleteFunction = (...args) => onDeleteModalGlobal(...args);
+export const selectHandler = (num?: number) => {
+  const id = num ?? DEFAULT_MODAL_ID;
+  if (!(id in HOLDER)) throw new Error('You don\'t have Global Wrapper');
+  return HOLDER[id];
+};
+
+export const upsertModalGlobal: onUpsertFunction = (...args) => selectHandler().upsert(...args);
+export const deleteModalGlobal: onDeleteFunction = (...args) => selectHandler().delete(...args);
 
 export const Wrapper = (props: IProps) => {
   const [modals, setModals] = useState<IModalState[]>([]);
-  const id = useModalId();
+  const id = (typeof props.global === 'number') ? props.global : (props.global ? DEFAULT_MODAL_ID : undefined);
 
   const onUpsert: onUpsertFunction = (state) => {
     setModals((arr) => {
@@ -57,16 +66,16 @@ export const Wrapper = (props: IProps) => {
   };
 
   useEffect(() => {
-    if (props.global) {
-      if (globalWrapperId && globalWrapperId !== id) throw new Error('You can use only one Global Wrapper');
-      globalWrapperId = id;
-      onUpsertModalGlobal = onUpsert;
-      onDeleteModalGlobal = onDelete;
+    if (id !== undefined) {
+      if (id in HOLDER) throw new Error('You can use only one Global Wrapper for ID: ' + id);
+
+      HOLDER[id] = {
+        upsert: onUpsert,
+        delete: onDelete,
+      };
 
       return () => {
-        globalWrapperId = undefined;
-        onUpsertModalGlobal = defaultGlobalFn;
-        onDeleteModalGlobal = defaultGlobalFn;
+        delete HOLDER[id];
       };
     }
   }, []);

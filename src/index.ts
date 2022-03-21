@@ -10,7 +10,8 @@ export {
   upsertModalGlobal,
   deleteModalGlobal,
   ModalsContext,
-  IModalState
+  IModalState,
+  selectHandler,
 } from './Wrapper';
 
 export { useBasicModalUnmount } from './hooks/useBasicModalUnmount';
