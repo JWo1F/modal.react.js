@@ -1,32 +1,38 @@
-import React, {ReactNode} from "react";
-import {modalId} from "./modalId";
-import {createPromise} from "./createPromise";
-import {BasicReverseCallbackContext, OnDeleteHandler} from "../Basic";
-import {deleteModalGlobal, upsertModalGlobal} from "../Wrapper";
+import React, { ReactNode } from "react";
+import {ID, selectHandler} from "../ModalsArea";
+import {getId} from "./getId";
+import {ModalContext} from "../Modal";
+import { eventEmitter } from "./eventEmitter";
 
 type Input<T> = (
   resolve: (value?: T | PromiseLike<T>) => void,
   reject: (reason?: any) => void,
 ) => ReactNode;
 
-export const showModal = async <T = void>(input: Input<T>) => {
-  const id = modalId();
-  const [onDelete, onDeletePromise] = createPromise<OnDeleteHandler>();
+export const showModal = async <T = void>(handlerId: ID, input: Input<T>) => {
+  const id = getId();
+  const handler = selectHandler(handlerId);
+  const emitter = eventEmitter();
+  const ctx = {
+    id: id,
+    subscribe: emitter.subscribe,
+    unsubscribe: emitter.unsubscribe
+  };
 
   const result = await new Promise<T>((res, rej) => {
-    upsertModalGlobal({
+    handler.upsert({
       id,
       element: (
-        <BasicReverseCallbackContext.Provider value={onDeletePromise}>
+        <ModalContext.Provider value={ctx}>
           {input(res, rej)}
-        </BasicReverseCallbackContext.Provider>
+        </ModalContext.Provider>
       )
     });
   });
 
-  onDelete(() => {
-    deleteModalGlobal(id);
-  });
+  await emitter.fire();
+
+  handler.delete(id);
 
   return result;
-}
+};

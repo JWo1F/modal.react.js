@@ -1,3 +1,5 @@
+# This is the readme for version 0.3.3, a new readme will be available soon
+
 # What is it?
 `modal.react.js` is a library for creating smart
 modal window with react way

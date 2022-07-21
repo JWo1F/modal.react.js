@@ -1,20 +1,26 @@
 const path = require('path');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  context: path.resolve(__dirname, '../src'),
-  entry: './index.ts',
-  mode: "production",
+  context: path.resolve(__dirname, '../examples'),
+  entry: './index.tsx',
+  mode: "development",
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, '../build'),
-    library: 'modal.react.js',
-    libraryTarget: "umd",
   },
 
-  externals: {
-    react: 'react',
-    'react-dom': 'react-dom'
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'build'),
+    },
+    compress: true,
+    port: 9000,
   },
+
+  plugins: [
+    new HtmlWebpackPlugin()
+  ],
 
   optimization: {
     minimize: false

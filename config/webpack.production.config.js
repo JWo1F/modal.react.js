@@ -8,11 +8,11 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, '../build'),
     library: 'modal.react.js',
-    libraryTarget: "umd",
+    libraryTarget: 'umd',
   },
 
   externals: {
-    react: 'react',
+    'react': 'react',
     'react-dom': 'react-dom'
   },
 

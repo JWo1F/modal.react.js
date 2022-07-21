@@ -1,1 +1,0 @@
-export const modalId = () => Math.abs(Math.random() * Number.MAX_SAFE_INTEGER | 0).toString(16);
