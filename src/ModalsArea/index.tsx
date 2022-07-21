@@ -1,6 +1,4 @@
-import React, {
-  ReactNode, createContext, useState, useEffect
-} from 'react';
+import React, {ReactNode, useState, useEffect} from 'react';
 
 export type ID = string | number;
 
@@ -13,8 +11,6 @@ export interface IModalState {
   id: string;
   element: ReactNode;
 }
-
-export const ModalsAreaIdContext = createContext<ID>(null);
 
 interface IGlobalFunctionsHolder {
   [id: string | number]: {
@@ -66,12 +62,10 @@ export const ModalsArea = (props: IProps) => {
   }, []);
 
   return (
-    <ModalsAreaIdContext.Provider value={props.id}>
-      {props.children}
-
+    <>
       {modals.map((modal) => (
         <div key={modal.id} data-id={modal.id}>{modal.element}</div>
       ))}
-    </ModalsAreaIdContext.Provider>
+    </>
   );
 };

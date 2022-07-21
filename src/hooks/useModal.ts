@@ -1,12 +1,11 @@
-import {ReactNode, useCallback, useContext, useEffect, useMemo, useRef} from "react";
-import {ID, ModalsAreaIdContext, selectHandler} from "../ModalsArea";
+import {ReactNode, useCallback, useEffect, useRef} from "react";
+import {ID, selectHandler} from "../ModalsArea";
 import {useId} from "./useId";
 
 type Fn = () => void | Promise<void>;
 
 export const useModal = (handlerId: ID | undefined, fn: Fn) => {
-  const handlerIdFromContext = useContext(ModalsAreaIdContext);
-  const handler = selectHandler(handlerId ?? handlerIdFromContext);
+  const handler = selectHandler(handlerId);
   const id = useId();
   const fnRef = useRef<Fn>();
 
